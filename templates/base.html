@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>涪陵五中高2026届分班情况查询系统</title>
+    {{ bootstrap.load_css() }}
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="/">主页</a>
+          </div>
+        </nav>
+    </div>
+
+    <div class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'message' %}
+                  <div class="alert alert-warning alert-dismissible" role="alert">
+                {% else %}
+                  <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+                {% endif %}
+                  {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+          {% endif %}
+      {% endwith %}
+    </div>
+
+    <div class="container mt-5">
+        {% block content %}{% endblock %}
+    </div>
+    {{ bootstrap.load_js() }}
+</body>
+</html>

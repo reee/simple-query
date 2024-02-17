@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2 class="text-center">导入学生信息</h2>
+    <hr>
+    <form method="post" enctype="multipart/form-data">
+        {% from 'bootstrap5/form.html' import render_form %}
+        {{ render_form(form) }}
+    </form>
+{% endblock %}
