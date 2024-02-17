@@ -9,6 +9,7 @@ bootstrap = Bootstrap5(app)
 app.config['SECRET_KEY'] = 'your_secret_key_here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['BOOTSTRAP_SERVE_LOCAL'] = True
 
 db.init_app(app)
 
