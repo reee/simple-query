@@ -10,7 +10,7 @@
                     <th>姓名</th>
                     <th>身份证后4位</th>
                     <th>班级</th>
-                    <th>教室号</th>
+                    <th>教室门牌号</th>
                     <th>班主任姓名</th>
                     <th>班主任电话</th>
                 </tr>
@@ -42,12 +42,20 @@
           </svg>
 
         <div class="alert alert-primary d-flex align-items-center" role="alert">
-            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
             <div>
-                <strong>温馨提醒：</strong>教室号第1位为楼栋号，其中1-4为教学楼1-4号楼，5为行政楼，6为科技楼;第2位为楼层号;第3-4位为房间号。
-            </div>
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                <strong>温馨提醒：</strong> <br>
+                1. 教室门牌号第1位为楼栋号，其中1-4为教学楼1-4号楼，5为行政楼，6为科技楼;第2位为楼层号;第3-4位为房间号。<br>
+                2. 部分学生因上报资料中未登记身份证号码，查询结果中身份证后4位会显示为0000，是正常的。<br>
+            </div>   
           </div>
     {% else %}
         <p>没有找到结果，请检查你的输入</p>
+        <div class="alert alert-primary d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+            <div>
+                <strong>温馨提醒：</strong>若确认输入无误但仍然没有结果，请咨询原班主任或到行政楼2楼教导处咨询。
+            </div>
+          </div>
     {% endif %}
 {% endblock %}

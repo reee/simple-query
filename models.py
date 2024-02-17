@@ -5,7 +5,7 @@ db = SQLAlchemy()
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    id_card = db.Column(db.String(18), nullable=False, unique=True)
+    id_card = db.Column(db.String(18), nullable=False)
     class_name = db.Column(db.String(50), nullable=False)
     classroom = db.Column(db.String(50))
     teacher_name = db.Column(db.String(100))

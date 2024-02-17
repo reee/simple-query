@@ -55,9 +55,8 @@ def upload():
             flash(f'成功导入 {num_imported} 条信息。', 'success')
             return redirect(url_for('index'))
         except Exception as e:
-            flash('导入未能成功，请查看错误信息', 'error')
+            flash(e, 'error')
             db.session.rollback()
-            print(e)
 
     return render_template('import.html', form=upload_form)
 
