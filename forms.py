@@ -12,4 +12,4 @@ class UploadForm(FlaskForm):
 
 class SearchForm(FlaskForm):
     name = StringField('请输入学生姓名', validators=[DataRequired()])
-    submit = SubmitField('检索')
+    submit = SubmitField('查询')
