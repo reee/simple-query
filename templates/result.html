@@ -1,62 +1,88 @@
 {% extends "base.html" %}
-
 {% block content %}
-    <h2 class="text-center">查询结果</h2>
-    <hr>
-    {% if students %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>姓名</th>
-                    <th>身份证后4位</th>
-                    <th>班级</th>
-                    <th>教室门牌号</th>
-                    <th>班主任姓名</th>
-                    <th>班主任电话</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for student in students %}
-                    <tr>
-                        <td>{{ student.name }}</td>
-                        <td>{{ student.id_card[-4:] }}</td>
-                        <td>{{ student.class_name }}</td>
-                        <td>{{ student.classroom }}</td>
-                        <td>{{ student.teacher_name }}</td>
-                        <td>{{ student.teacher_phone }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
+
+<h2 class="text-center mb-4">查询结果</h2>
+
+{% if students %}
+  {% if students|length > 1 %}
+    <div class="alert alert-warning" role="alert">
+      <i class="bi bi-info-circle-fill me-2"></i>
+      注意：存在多个匹配结果，请根据个人信息进行区分。
+    </div>
+  {% endif %}
+
+  {% for student in students %}
+    <div class="card text-center mb-2">
+      <div class="card-header">
+        <h5 class="card-title">{{ student.name }}</h5>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped">
+          <tbody>
+            <tr>
+              <th>身份证后4位</th>
+              <td>{{ student.id_card[-4:] }}</td> 
+            </tr>
+            <tr>
+              <th>联系电话</th>
+              <td>{{ student.parent_phone }}</td> 
+            </tr>
+            <tr>
+              <th>班级</th>
+              <td>{{ student.class_name }}</td> 
+            </tr>
+            <tr>
+              <th>教室门牌号/位置</th>
+              <td>{{ student.classroom }}</td> 
+            </tr>
+            <tr>
+              <th>班主任姓名</th>
+              <td>{{ student.teacher_name }}</td> 
+            </tr>
+            <tr>
+              <th>班主任电话</th>
+              <td>{{ student.teacher_phone }}</td> 
+            </tr>
+            <tr>
+              <th>寝室安排</th>
+              <td>{{ student.dormitory }}</td> 
+            </tr>
+          </tbody>
         </table>
-
-        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-            <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-            </symbol>
-            <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-            </symbol>
-            <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
-              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-            </symbol>
-          </svg>
-
-        <div class="alert alert-primary d-flex align-items-center" role="alert">
-            <div>
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
-                <strong>温馨提醒：</strong> <br>
-                1. 高中部教室门牌号第1位为楼栋号，其中1-4为教学楼1-4号楼，5为行政楼，6为科技楼;第2位为楼层号;第3-4位为房间号。<br>
-                2. 部分学生因上报资料中未登记身份证号码，查询结果中身份证后4位会显示为0000，是正常的。<br>
-                3. 重名同学请根据身份证后4位等判断自己的班级，无法判断的可到班主任处确认。<br>
-            </div>   
+      </div>
+      {% if student.qr_code %}
+        <div class="card-footer">
+          <img src="{{ url_for('static', filename=student.qr_code) }}" alt="入群二维码" class="rounded mx-auto d-block" style="max-width: 200px;">
+          <div class="mt-2">
+            <p><strong>扫码入群说明：</strong></p>
+            {% if '高' in student.class_name %}
+              <p>此群为师生群，请学生扫码加入（学生无手机的由家长扫码加入）。</p>
+            {% elif '初' in student.class_name %}
+              <p>此群为家校群，请家长扫码加入。</p>
+            {% endif %}
+            <p>加入方法：请在图片上长按，选择"下载图片"后，使用<strong>钉钉</strong>扫描图片加入对应班级。</p>
           </div>
-    {% else %}
-        <p>没有找到结果，请检查你的输入</p>
-        <div class="alert alert-primary d-flex align-items-center" role="alert">
-            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
-            <div>
-                <strong>温馨提醒：</strong>若确认输入无误但仍然没有结果，请咨询原班主任或到行政楼2楼教导处咨询。
-            </div>
-          </div>
-    {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+
+  <div class="mt-2">
+    <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading"><i class="bi bi-info-circle-fill me-2"></i>温馨提醒：</h4>
+        <ol>
+            <li>高2027届教室集中在1号楼(门牌号以1开头)和科技实验楼(门牌号以5开头)，门牌号第二位为楼层号。</li>
+            <li>初中部在面向涪陵五中东北门（靠长江那个门）的右侧，初2027届教室集中在初中部教学楼1、2、3楼。</li>
+            <li>部分学生因上报资料中未登记身份证号码，查询结果中身份证后4位会显示为0000。</li>
+        </ol>
+    </div>
+  </div>
+
+{% else %}
+  <div class="alert alert-warning" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    <p><strong>温馨提醒：</strong>若确认输入无误但仍然没有结果，请到行政楼2楼教导处咨询。</p>
+  </div>
+{% endif %}
+
 {% endblock %}
