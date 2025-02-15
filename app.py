@@ -28,7 +28,17 @@ def index():
     search_form = SearchForm()
     if search_form.validate_on_submit():
         name = search_form.name.data.strip()  # 移除首尾的空白字符
-        students = Student.query.filter(func.trim(Student.name) == name).all()
+        id_last_four = search_form.id_last_four.data.strip().upper()  # 转换为大写
+        
+        # 查询同时匹配姓名和身份证后4位的学生
+        students = Student.query.filter(
+            func.trim(Student.name) == name,
+            Student.id_card.endswith(id_last_four)
+        ).all()
+        
+        if not students:
+            flash('未找到匹配的学生信息，请检查姓名和身份证后4位是否正确。', 'warning')
+            return render_template('index.html', form=search_form)
         
         for student in students:
             # URL encode the class name to handle special characters
@@ -41,9 +51,11 @@ def process_excel(file):
     df = pd.read_excel(file)
     students = []
     for _, row in df.iterrows():
+        # 确保身份证号中的x转为大写X
+        id_card = str(row['身份证号']).upper() if pd.notna(row['身份证号']) else None
         student = Student(
             name=row['姓名'],
-            id_card=row['身份证号'],
+            id_card=id_card,
             parent_phone = str(row['家长电话']).split('.')[0] if pd.notna(row['家长电话']) else None,
             class_name=row['班级'],
             classroom=row['教室位置'],

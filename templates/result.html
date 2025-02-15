@@ -1,88 +1,102 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2 class="text-center mb-4">查询结果</h2>
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="m-0">查询结果</h2>
+    <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left me-1"></i>返回
+    </a>
+  </div>
 
-{% if students %}
-  {% if students|length > 1 %}
-    <div class="alert alert-warning" role="alert">
-      <i class="bi bi-info-circle-fill me-2"></i>
-      注意：存在多个匹配结果，请根据个人信息进行区分。
-    </div>
-  {% endif %}
+  {% if students %}
+    {% if students|length > 1 %}
+      <div class="alert alert-warning d-flex align-items-center" role="alert">
+        <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+        <div>注意：存在多个匹配结果，请根据个人信息进行区分。</div>
+      </div>
+    {% endif %}
 
-  {% for student in students %}
-    <div class="card text-center mb-2">
-      <div class="card-header">
-        <h5 class="card-title">{{ student.name }}</h5>
-      </div>
-      <div class="card-body">
-        <table class="table table-striped">
-          <tbody>
-            <tr>
-              <th>身份证后4位</th>
-              <td>{{ student.id_card[-4:] }}</td> 
-            </tr>
-            <tr>
-              <th>联系电话</th>
-              <td>{{ student.parent_phone }}</td> 
-            </tr>
-            <tr>
-              <th>班级</th>
-              <td>{{ student.class_name }}</td> 
-            </tr>
-            <tr>
-              <th>教室门牌号/位置</th>
-              <td>{{ student.classroom }}</td> 
-            </tr>
-            <tr>
-              <th>班主任姓名</th>
-              <td>{{ student.teacher_name }}</td> 
-            </tr>
-            <tr>
-              <th>班主任电话</th>
-              <td>{{ student.teacher_phone }}</td> 
-            </tr>
-            <tr>
-              <th>寝室安排</th>
-              <td>{{ student.dormitory }}</td> 
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      {% if student.qr_code %}
-        <div class="card-footer">
-          <img src="{{ url_for('static', filename=student.qr_code) }}" alt="入群二维码" class="rounded mx-auto d-block" style="max-width: 200px;">
-          <div class="mt-2">
-            <p><strong>扫码入群说明：</strong></p>
-            {% if '高' in student.class_name %}
-              <p>此群为师生群，请学生扫码加入（学生无手机的由家长扫码加入）。</p>
-            {% elif '初' in student.class_name %}
-              <p>此群为家校群，请家长扫码加入。</p>
-            {% endif %}
-            <p>加入方法：请在图片上长按，选择"下载图片"后，使用<strong>钉钉</strong>扫描图片加入对应班级。</p>
+    {% for student in students %}
+      <div class="card shadow-sm mb-4 border-0">
+        <div class="card-header bg-primary text-white py-3">
+          <h5 class="card-title m-0">{{ student.name }}</h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <tbody>
+                <tr>
+                  <th class="bg-light" style="width: 30%">身份证后4位</th>
+                  <td>{{ student.id_card[-4:] }}</td> 
+                </tr>
+                <tr>
+                  <th class="bg-light">联系电话</th>
+                  <td>{{ student.parent_phone }}</td> 
+                </tr>
+                <tr>
+                  <th class="bg-light">班级</th>
+                  <td>{{ student.class_name }}</td> 
+                </tr>
+                <tr>
+                  <th class="bg-light">教室门牌号/位置</th>
+                  <td>{{ student.classroom }}</td> 
+                </tr>
+                <tr>
+                  <th class="bg-light">班主任姓名</th>
+                  <td>{{ student.teacher_name }}</td> 
+                </tr>
+                <tr>
+                  <th class="bg-light">班主任电话</th>
+                  <td>{{ student.teacher_phone }}</td> 
+                </tr>
+                <tr>
+                  <th class="bg-light">寝室安排</th>
+                  <td>{{ student.dormitory }}</td> 
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-      {% endif %}
-    </div>
-  {% endfor %}
+        {% if student.qr_code %}
+          <div class="card-footer bg-white p-4 text-center border-top">
+            <img src="{{ url_for('static', filename=student.qr_code) }}" alt="入群二维码" class="img-fluid rounded shadow-sm mb-3" style="max-width: 200px;">
+            <div class="bg-light p-3 rounded">
+              <h6 class="mb-3"><i class="bi bi-qr-code-scan me-2"></i>扫码入群说明</h6>
+              {% if '高' in student.class_name %}
+                <p class="mb-2">此群为<span class="badge bg-primary">师生群</span>，请<strong>学生</strong>扫码加入（学生无手机号的由家长扫码加入）。</p>
+              {% elif '初' in student.class_name %}
+                <p class="mb-2">此群为<span class="badge bg-primary">家校群</span>，请<strong>家长</strong>扫码加入。</p>
+              {% endif %}
+              <p class="mb-0 text-muted small">加入方法：请在图片上长按，选择"下载图片"后，使用<strong>钉钉</strong>扫描图片加入对应班级。</p>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
 
-  <div class="mt-2">
-    <div class="alert alert-info" role="alert">
-        <h4 class="alert-heading"><i class="bi bi-info-circle-fill me-2"></i>温馨提醒：</h4>
-        <ol>
-            <li>高2027届教室集中在1号楼(门牌号以1开头)和科技实验楼(门牌号以5开头)，门牌号第二位为楼层号。</li>
-            <li>初中部在面向涪陵五中东北门（靠长江那个门）的右侧，初2027届教室集中在初中部教学楼1、2、3楼。</li>
-            <li>部分学生因上报资料中未登记身份证号码，查询结果中身份证后4位会显示为0000。</li>
+    <div class="card border-info mt-4">
+      <div class="card-header bg-info text-white">
+        <h5 class="card-title m-0"><i class="bi bi-info-circle-fill me-2"></i>温馨提醒</h5>
+      </div>
+      <div class="card-body">
+        <ol class="mb-0">
+          <li class="mb-2">高2027届教室集中在1号楼(门牌号以1开头)和科技实验楼(门牌号以5开头)，门牌号第二位为楼层号。</li>
+          <li class="mb-2">初中部在面向涪陵五中东北门（靠长江那个门）的右侧，初2027届教室集中在初中部教学楼1、2、3楼。</li>
+          <li class="mb-0">部分学生因上报资料中未登记身份证号码，查询结果中身份证后4位会显示为0000。</li>
         </ol>
+      </div>
     </div>
-  </div>
 
-{% else %}
-  <div class="alert alert-warning" role="alert">
-    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-    <p><strong>温馨提醒：</strong>若确认输入无误但仍然没有结果，请到行政楼2楼教导处咨询。</p>
-  </div>
-{% endif %}
+  {% else %}
+    <div class="alert alert-warning d-flex align-items-center shadow-sm" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
+      <div>
+        <p class="fw-bold mb-1">未找到匹配的查询结果</p>
+        <p class="mb-0">若确认输入无误但仍然没有结果，请到行政楼2楼教导处咨询。</p>
+      </div>
+    </div>
+  {% endif %}
+</div>
 
 {% endblock %}

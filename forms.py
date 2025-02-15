@@ -11,5 +11,7 @@ class UploadForm(FlaskForm):
     submit = SubmitField('Upload')
 
 class SearchForm(FlaskForm):
-    name = StringField('请输入学生姓名', validators=[DataRequired()])
+    name = StringField('学生姓名', validators=[DataRequired()])
+    id_last_four = StringField('身份证后4位', validators=[DataRequired()],
+                              description='如果身份证最后一位是X，请输入大写X')
     submit = SubmitField('查询')
