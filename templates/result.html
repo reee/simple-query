@@ -50,10 +50,6 @@
                   <th class="bg-light">班主任电话</th>
                   <td>{{ student.teacher_phone }}</td> 
                 </tr>
-                <tr>
-                  <th class="bg-light">寝室安排</th>
-                  <td>{{ student.dormitory }}</td> 
-                </tr>
               </tbody>
             </table>
           </div>
@@ -64,7 +60,7 @@
             <div class="bg-light p-3 rounded">
               <h6 class="mb-3"><i class="bi bi-qr-code-scan me-2"></i>扫码入群说明</h6>
               {% if '高' in student.class_name %}
-                <p class="mb-2">此群为<span class="badge bg-primary">师生群</span>，请<strong>学生</strong>扫码加入（学生无手机号的由家长扫码加入）。</p>
+                <p class="mb-2">此群为<span class="badge bg-primary">师生群</span>，请<strong>学生</strong>扫码加入（请注意：一个手机号不能既是学生又是家长。）。</p>
               {% elif '初' in student.class_name %}
                 <p class="mb-2">此群为<span class="badge bg-primary">家校群</span>，请<strong>家长</strong>扫码加入。</p>
               {% endif %}

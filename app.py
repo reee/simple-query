@@ -37,7 +37,7 @@ def index():
         ).all()
         
         if not students:
-            flash('未找到匹配的学生信息，请检查姓名和身份证后4位是否正确。', 'warning')
+            flash('未找到匹配的学生信息，请检查姓名和身份证后4位是否正确。若确认输入无误，请到行政楼2楼教导处咨询。', 'warning')
             return render_template('index.html', form=search_form)
         
         for student in students:
